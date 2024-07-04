@@ -103,21 +103,28 @@ def getStats(url):
 
     endtaglen = len('</span>')
     playername = name[index+1 : len(name) - endtaglen]
-    morestats = [playername] + morestats
+    morestats = [playername.upper()] + morestats
 
     all_stats = morestats + stats
     return all_stats
 
 if __name__ == "__main__":
-    url = "https://renderz.app/24/player/30901310"
-    header = getLabels(url) # labels, stat values
-    all_stats = getStats(url) # labels, stat values
+    randomURL = "https://renderz.app/24/player/30901310" # this is just for header (it doenst really matter who it is)
+    header = getLabels(randomURL) # labels
 
-    # with open("penis.csv", 'w') as file:
-    #     w = csv.writer(file)
-    #     w.writerow(header)
+    filename = "penis.csv"
+    # write the header first
+    with open(filename, 'w', encoding="utf-8", newline='') as file:
+        w = csv.writer(file)
+        w.writerow(header)
 
-    
+    file = open(filename, 'a', encoding="utf-8", newline='')
+    w = csv.writer(file)
+    url = input("Type in URL of player: ")
+    all_stats = getStats(url) # stat values
+    w.writerow(all_stats)
+    file.close()
+    # print(all_stats)
 
     # print(header)
     # print(all_stats)
