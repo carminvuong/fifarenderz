@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
 
 
 
@@ -63,33 +64,61 @@ def format_others(bsTagList, prefs):
 
     return stringList
 
-if __name__ == "__main__":
-    
-    # making a GET request
-    url = "https://renderz.app/24/player/30901310"
+def getLabels(url): # sets up and extracts all the labels
+    # takes a URL link
+    # returns a list with all the labels
     r = requests.get(url)
-
     soup = BeautifulSoup(r.content, 'html.parser')
 
     # extracting all the data and putting it into a dictionary
     taglabels = soup.find_all('span', class_='player-stat-name')
     labels = format_labels(taglabels) # convert into strings and just the labels
+   
+
+    otherlabels = soup.find_all('span', class_='text-white font-semibold')
+    morelabels = format_others(otherlabels, [0+1, 4+1, 5+1, 6+1, 7+1, 8+1])
+    morelabels = ["NAME"] + morelabels
+
+    all_labels = morelabels + labels
+    return all_labels
+
+def getStats(url):
+    # takes a URL link
+    # returns a list with all the stat values
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'html.parser')
 
     statlabels = soup.find_all('span', class_='player-stat-value')
     stats = format_stats(statlabels) # convert into numbers and just the stat values
 
-    otherlabels = soup.find_all('span', class_='text-white font-semibold')
-    morelabels = format_others(otherlabels, [0+1, 4+1, 5+1, 6+1, 7+1, 8+1])
-
     otherstats = soup.find_all('span', class_='text-white/40')
     morestats = format_others(otherstats, [0, 4, 5, 6, 7, 8])
 
-    all_labels = morelabels + labels
-    all_stats = morestats + stats
+    name = str(soup.find('span', class_='text-white font-semibold'))
+    index = 0
+    for char in name:
+        if char == '>':
+            break
+        index += 1
 
-    data = dict(zip(all_labels, all_stats)) # mashing everything into a dictionary
+    endtaglen = len('</span>')
+    playername = name[index+1 : len(name) - endtaglen]
+    morestats = [playername] + morestats
+
+    all_stats = morestats + stats
+    return all_stats
+
+if __name__ == "__main__":
+    url = "https://renderz.app/24/player/30901310"
+    header = getLabels(url) # labels, stat values
+    all_stats = getStats(url) # labels, stat values
+
+    # with open("penis.csv", 'w') as file:
+    #     w = csv.writer(file)
+    #     w.writerow(header)
 
     
 
-    print(data)
+    # print(header)
+    # print(all_stats)
     
