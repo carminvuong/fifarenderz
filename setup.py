@@ -10,3 +10,5 @@ if __name__ == "__main__":
     with open("data.csv", 'w', encoding="utf-8", newline='') as file:
         w = csv.writer(file)
         w.writerow(header)
+    
+    print("setup done!")
