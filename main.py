@@ -12,7 +12,11 @@ url_var=StringVar()
 def submit():
     url = url_var.get()
     url_var.set("")
-    print(url)
+    
+    with open("data.csv", 'a', encoding="utf-8", newline='') as file:
+        w = csv.writer(file)
+        all_stats = getStats(url) # stat values
+        w.writerow(all_stats)
 
 
 url_label = Label(r, text='URL',font=('calibre',10, 'bold'))
@@ -28,13 +32,8 @@ destroy_button = Button(r, text='close window', width=10, command=r.destroy)
 destroy_button.grid(row=1, column=1)
 
 r.mainloop()
-# filename = input("Datafile name (without extension): ") + ".csv"
 
-# with open(filename, 'a', encoding="utf-8", newline='') as file:
-    # w = csv.writer(file)
-    # url = input("Type in URL of player: ")
-    # all_stats = getStats(url) # stat values
-    # w.writerow(all_stats)
+# 
 
     
 
