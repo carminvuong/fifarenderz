@@ -3,7 +3,7 @@ import csv
 
 
 if __name__ == "__main__":
-    randomURL = "https://renderz.app/24/player/30901310" # this is just for header (it doenst really matter who it is)
+    randomURL = "https://renderz.app/24/player/30901339" # this is just for header (it doenst really matter who it is)
     header = getLabels(randomURL) # labels
 
     # write the header first

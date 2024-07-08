@@ -88,9 +88,16 @@ def getStats(url):
     statlabels = soup.find_all('span', class_='player-stat-value')
     stats = format_stats(statlabels) # convert into numbers and just the stat values
 
-    otherstats = soup.find_all('span', class_='text-white/40')
-    morestats = format_others(otherstats, [0, 4, 5, 6, 7, 8])
-
+    # accounting for optional alternate positions
+    otherlabels = soup.find_all('span', class_='text-white font-semibold')  
+    if len(otherlabels) >= 11: # has alternate pos
+        otherstats = soup.find_all('span', class_='text-white/40')
+        morestats = format_others(otherstats, [0, 4, 5, 6, 7, 8])
+    else: # missing alternate pos
+        otherstats = soup.find_all('span', class_='text-white/40')
+        morestats = ["BIGPENIS"] + format_others(otherstats, [4-1, 5-1, 6-1, 7-1, 8-1])
+        
+    # finding their names
     name = str(soup.find('span', class_='text-white font-semibold'))
     index = 0
     for char in name:
@@ -101,6 +108,7 @@ def getStats(url):
     endtaglen = len('</span>')
     playername = name[index+1 : len(name) - endtaglen]
     morestats = [playername.upper()] + morestats
+
 
     all_stats = morestats + stats
     return all_stats
