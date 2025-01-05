@@ -5,6 +5,7 @@ import csv
 r = Tk()
 r.title("Fifa Renderz Player Data")
 r.geometry("600x400")
+# test
 
 # declaring string variable for url
 url_var=StringVar()
